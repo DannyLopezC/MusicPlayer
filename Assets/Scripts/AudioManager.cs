@@ -31,6 +31,8 @@ namespace MusicPlayer
         private void Update()
         {
             SetTimer();
+
+
         }
 
         public void SetTimer()
@@ -57,13 +59,21 @@ namespace MusicPlayer
 
             title.text = currentSong.songName;
             if (!source.isPlaying)
+            {
                 source.Play();
+                CancelInvoke("Next");
+                Invoke("Next", source.clip.length - source.time + 1f);
+            }
             else
+            {
                 source.Pause();
+                CancelInvoke("Next");
+            }
         }
 
         public void Stop()
         {
+            CancelInvoke("Next");
             source.Stop();
         }
 
@@ -73,7 +83,7 @@ namespace MusicPlayer
 
             for (int i = 0; i < currentPlaylist.musicList.Count; i++)
             {
-                if (currentSong.songName == currentSongName)
+                if (currentPlaylist.musicList[i].songName == currentSongName)
                 {
                     if (i + 1 > currentPlaylist.musicList.Count - 1)
                         currentSong = currentPlaylist.musicList[0];
@@ -92,7 +102,7 @@ namespace MusicPlayer
 
             for (int i = 0; i < currentPlaylist.musicList.Count; i++)
             {
-                if (currentSong.songName == currentSongName)
+                if (currentPlaylist.musicList[i].songName == currentSongName)
                 {
                     if (i - 1 < 0)
                         currentSong = currentPlaylist.musicList[currentPlaylist.musicList.Count - 1];

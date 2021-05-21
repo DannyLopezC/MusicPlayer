@@ -1134,7 +1134,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1233,4 +1233,4 @@ MonoBehaviour:
   source: {fileID: 0}
   currentPlaylistId: 0
   title: {fileID: 827958316}
-  timer: {fileID: 0}
+  timer: {fileID: 1089144142}
