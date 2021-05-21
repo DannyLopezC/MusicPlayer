@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf4e64f1cdd7e24aa774349897d0187, type: 3}
+  m_Name: Playlist_test
+  m_EditorClassIdentifier: 
+  playListName: test
+  id: 0
+  musicList:
+  - audioClip: {fileID: 8300000, guid: cdce58be67fa3c04fbc5c23919b9f9e6, type: 3}
+    id: 0
+    songName: Attack on Titan Season 4 Episode 5 OST Eren Transformation Theme x
+      YOUSEEBIGGIRL (Vogel im Kaf
+  - audioClip: {fileID: 8300000, guid: 2e36b4a209a747642863361f5388cbb1, type: 3}
+    id: 1
+    songName: Slash - Anastasia (guitar cover by Marina Andrienko)
