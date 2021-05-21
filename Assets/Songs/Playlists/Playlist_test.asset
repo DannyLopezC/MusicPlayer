@@ -22,3 +22,6 @@ MonoBehaviour:
   - audioClip: {fileID: 8300000, guid: 2e36b4a209a747642863361f5388cbb1, type: 3}
     id: 1
     songName: Slash - Anastasia (guitar cover by Marina Andrienko)
+  - audioClip: {fileID: 8300000, guid: 90036047a05283a41ac11ef2648dea28, type: 3}
+    id: 2
+    songName: Esqueleto con trompeta
