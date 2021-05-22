@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -11,6 +10,8 @@ namespace Michsky.UI.ModernUIPack
         [Header("SETTINGS")]
         public UIManager UIManagerAsset;
         public ButtonType buttonType;
+
+        bool dynamicUpdateEnabled;
 
         // Basic Resources
         [HideInInspector] public Image basicFilled;
@@ -79,35 +80,44 @@ namespace Michsky.UI.ModernUIPack
             ROUNDED_OUTLINE,
         }
 
-        void Awake()
+        void OnEnable()
         {
-            try
+            if (UIManagerAsset == null)
             {
-                if (UIManagerAsset == null)
-                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
-
-                this.enabled = true;
-
-                if (UIManagerAsset.enableDynamicUpdate == false)
+                try
                 {
-                    UpdateButton();
-                    this.enabled = false;
+                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
+                }
+
+                catch
+                {
+                    Debug.Log("No UI Manager found. Assign it manually, otherwise you'll get errors about it.", this);
                 }
             }
+        }
 
-            catch
+        void Awake()
+        {
+            if (dynamicUpdateEnabled == false)
             {
-                Debug.Log("<b>[Modern UI Pack]</b> No UI Manager found, assign it manually.", this);
+                this.enabled = true;
+                UpdateButton();
             }
         }
 
         void LateUpdate()
         {
-            if (UIManagerAsset == null)
-                return;
+            if (Application.isEditor == true && UIManagerAsset != null)
+            {
+                if (UIManagerAsset.enableDynamicUpdate == true)
+                {
+                    dynamicUpdateEnabled = true;
+                    UpdateButton();
+                }
 
-            if (UIManagerAsset.enableDynamicUpdate == true)
-                UpdateButton();
+                else
+                    dynamicUpdateEnabled = false; 
+            }
         }
 
         void UpdateButton()
@@ -308,4 +318,3 @@ namespace Michsky.UI.ModernUIPack
         }
     }
 }
-#endif

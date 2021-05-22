@@ -6,20 +6,17 @@ namespace Michsky.UI.ModernUIPack
     [CreateAssetMenu(fileName = "New UI Manager", menuName = "Modern UI Pack/New UI Manager")]
     public class UIManager : ScriptableObject
     {
-        // Settings
         [HideInInspector] public bool enableDynamicUpdate = true;
         [HideInInspector] public bool enableExtendedColorPicker = true;
         [HideInInspector] public bool editorHints = true;
-        [HideInInspector] public bool changeRootFolder = true;
-        [HideInInspector] public string rootFolder = "Modern UI Pack/Prefabs/";
 
-        // Animated Icon
+        // [Header("ANIMATED ICON")]
         public Color animatedIconColor = new Color(255, 255, 255, 255);
 
-        // Context Menu
+        // [Header("CONTEXT MENU")]
         public Color contextBackgroundColor = new Color(255, 255, 255, 255);
 
-        // Button
+        // [Header("BUTTON")]
         public ButtonThemeType buttonThemeType;
         public TMP_FontAsset buttonFont;
         public float buttonFontSize = 22.5f;
@@ -32,7 +29,7 @@ namespace Michsky.UI.ModernUIPack
         public Color buttonIconColor = new Color(255, 255, 255, 255);
         public Color buttonIconHighlightedColor = new Color(255, 255, 255, 255);
 
-        // Dropdown
+        // [Header("DROPDOWN")]
         public TMP_FontAsset dropdownItemFont;
         public float dropdownItemFontSize = 22.5f;
         public DropdownThemeType dropdownThemeType;
@@ -46,7 +43,7 @@ namespace Michsky.UI.ModernUIPack
         public Color dropdownItemTextColor = new Color(255, 255, 255, 255);
         public Color dropdownItemIconColor = new Color(255, 255, 255, 255);
 
-        // Horizontal Selector
+        // [Header("HORIZONTAL SELECTOR")]
         public TMP_FontAsset selectorFont;
         public float hSelectorFontSize = 28;
         public Color selectorColor = new Color(255, 255, 255, 255);
@@ -54,12 +51,12 @@ namespace Michsky.UI.ModernUIPack
         public bool hSelectorInvertAnimation = false;
         public bool hSelectorLoopSelection = false;
 
-        // Input Field
+        // [Header("INPUT FIELD")]
         public TMP_FontAsset inputFieldFont;
         public float inputFieldFontSize = 28;
         public Color inputFieldColor = new Color(255, 255, 255, 255);
 
-        // Modal Window
+        // [Header("MODAL WINDOW")]
         public TMP_FontAsset modalWindowTitleFont;
         public TMP_FontAsset modalWindowContentFont;
         public DropdownThemeType modalThemeType;
@@ -69,7 +66,7 @@ namespace Michsky.UI.ModernUIPack
         public Color modalWindowBackgroundColor = new Color(255, 255, 255, 255);
         public Color modalWindowContentPanelColor = new Color(255, 255, 255, 255);
 
-        // Notification
+        // [Header("NOTIFICATION")]
         public TMP_FontAsset notificationTitleFont;
         public float notificationTitleFontSize = 22.5f;
         public TMP_FontAsset notificationDescriptionFont;
@@ -80,7 +77,7 @@ namespace Michsky.UI.ModernUIPack
         public Color notificationDescriptionColor = new Color(255, 255, 255, 255);
         public Color notificationIconColor = new Color(255, 255, 255, 255);
 
-        // Progress Bar
+        // [Header("PROGRESS BAR")]
         public TMP_FontAsset progressBarLabelFont;
         public float progressBarLabelFontSize = 25;
         public Color progressBarColor = new Color(255, 255, 255, 255);
@@ -88,11 +85,11 @@ namespace Michsky.UI.ModernUIPack
         public Color progressBarLoopBackgroundColor = new Color(255, 255, 255, 255);
         public Color progressBarLabelColor = new Color(255, 255, 255, 255);
 
-        // Scrollbar
+        // [Header("SCROLLBAR")]
         public Color scrollbarColor = new Color(255, 255, 255, 255);
         public Color scrollbarBackgroundColor = new Color(255, 255, 255, 255);
 
-        // Slider
+        // [Header("SLIDER")]
         public TMP_FontAsset sliderLabelFont;
         public float sliderLabelFontSize = 24;
         public SliderThemeType sliderThemeType;
@@ -102,13 +99,13 @@ namespace Michsky.UI.ModernUIPack
         public Color sliderPopupLabelColor = new Color(255, 255, 255, 255);
         public Color sliderHandleColor = new Color(255, 255, 255, 255);
 
-        // Switch
+        // [Header("SWITCH")]
         public Color switchBorderColor = new Color(255, 255, 255, 255);
         public Color switchBackgroundColor = new Color(255, 255, 255, 255);
         public Color switchHandleOnColor = new Color(255, 255, 255, 255);
         public Color switchHandleOffColor = new Color(255, 255, 255, 255);
 
-        // Toggle
+        // [Header("TOGGLE")]
         public TMP_FontAsset toggleFont;
         public float toggleFontSize = 35;
         public ToggleThemeType toggleThemeType;
@@ -117,7 +114,7 @@ namespace Michsky.UI.ModernUIPack
         public Color toggleBackgroundColor = new Color(255, 255, 255, 255);
         public Color toggleCheckColor = new Color(255, 255, 255, 255);
 
-        // Tooltip
+        // [Header("TOOLTIP")]
         public TMP_FontAsset tooltipFont;
         public float tooltipFontSize = 22;
         public Color tooltipTextColor = new Color(255, 255, 255, 255);

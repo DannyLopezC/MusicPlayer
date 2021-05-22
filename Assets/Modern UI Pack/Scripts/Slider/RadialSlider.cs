@@ -19,7 +19,6 @@ namespace Michsky.UI.ModernUIPack
         public TextMeshProUGUI valueText;
 
         // Settings
-        public float minValue = 0;
         public float maxValue = 100;
         [Range(0, 8)] public int decimals;
         public bool isPercent;
@@ -69,7 +68,7 @@ namespace Michsky.UI.ModernUIPack
 
             if (graphicRaycaster == null)
             {
-                Debug.LogWarning("Could not find GraphicRaycaster component in parent of this GameObject: " + name, this);
+                Debug.LogWarning("Could not find GraphicRaycaster component in parent of this GameObject: " + name);
                 Destroy(gameObject);
             }
         }
@@ -101,10 +100,7 @@ namespace Michsky.UI.ModernUIPack
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (currentValue >= minValue)
-                HandleSliderMouseInput(eventData, false);
-            else if (currentValue <= minValue)
-                SliderValueRaw = minValue;
+            HandleSliderMouseInput(eventData, false);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -135,15 +131,12 @@ namespace Michsky.UI.ModernUIPack
 
         public void UpdateUI()
         {
-            if (SliderValueRaw >= minValue)
-            {
-                float normalizedAngle = SliderAngle / 360.0f;
-                indicatorPivot.transform.localEulerAngles = new Vector3(180.0f, 0.0f, SliderAngle);
-                sliderImage.fillAmount = normalizedAngle;
+            float normalizedAngle = SliderAngle / 360.0f; 
+            indicatorPivot.transform.localEulerAngles = new Vector3(180.0f, 0.0f, SliderAngle);
+            sliderImage.fillAmount = normalizedAngle;
 
-                valueText.text = string.Format("{0}{1}", SliderValue, isPercent ? "%" : "");
-                currentValue = SliderValue;
-            }
+            valueText.text = string.Format("{0}{1}", SliderValue, isPercent ? "%" : "");
+            currentValue = SliderValue;
         }
 
         private bool HasValueChanged()

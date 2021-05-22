@@ -24,7 +24,6 @@ namespace Michsky.UI.ModernUIPack
         public float timer = 3f;
         public bool useCustomContent = false;
         public bool useStacking = false;
-        public bool destroyAfterPlaying = false;
         public NotificationStyle notificationStyle;
 
         public enum NotificationStyle
@@ -58,7 +57,7 @@ namespace Michsky.UI.ModernUIPack
             {
                 try
                 {
-                    NotificationStacking stacking = transform.GetComponentInParent<NotificationStacking>();
+                    var stacking = (NotificationStacking)GameObject.FindObjectsOfType(typeof(NotificationStacking))[0];
                     stacking.notifications.Add(this);
                     stacking.enableUpdating = true;
                     gameObject.SetActive(false);
@@ -71,13 +70,8 @@ namespace Michsky.UI.ModernUIPack
         IEnumerator StartTimer()
         {
             yield return new WaitForSeconds(timer);
-            CloseNotification();
-        }
-
-        IEnumerator DestroyNotification()
-        {
-            yield return new WaitForSeconds(1f);
-            Destroy(gameObject);
+            notificationAnimator.Play("Out");
+            StopCoroutine("StartTimer");
         }
 
         public void OpenNotification()
@@ -91,9 +85,6 @@ namespace Michsky.UI.ModernUIPack
         public void CloseNotification()
         {
             notificationAnimator.Play("Out");
-
-            if (destroyAfterPlaying == true)
-                StartCoroutine("DestroyNotification");
         }
 
         public void UpdateUI()

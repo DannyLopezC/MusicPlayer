@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Michsky.UI.ModernUIPack
@@ -13,35 +12,46 @@ namespace Michsky.UI.ModernUIPack
         [Header("RESOURCES")]
         public Image backgroundImage;
 
-        void Awake()
+        bool dynamicUpdateEnabled;
+
+        void OnEnable()
         {
-            try
+            if (UIManagerAsset == null)
             {
-                if (UIManagerAsset == null)
-                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
-
-                this.enabled = true;
-
-                if (UIManagerAsset.enableDynamicUpdate == false)
+                try
                 {
-                    UpdateContextMenu();
-                    this.enabled = false;
+                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
+                }
+
+                catch
+                {
+                    Debug.Log("No UI Manager found. Assign it manually, otherwise you'll get errors about it.", this);
                 }
             }
+        }
 
-            catch
+        void Awake()
+        {
+            if (dynamicUpdateEnabled == false)
             {
-                Debug.Log("<b>[Modern UI Pack]</b> No UI Manager found, assign it manually.", this);
+                this.enabled = true;
+                UpdateContextMenu();
             }
         }
 
         void LateUpdate()
         {
-            if (UIManagerAsset == null)
-                return;
+            if (Application.isEditor == true && UIManagerAsset != null)
+            {
+                if (UIManagerAsset.enableDynamicUpdate == true)
+                {
+                    dynamicUpdateEnabled = true;
+                    UpdateContextMenu();
+                }
 
-            if (UIManagerAsset.enableDynamicUpdate == true)
-                UpdateContextMenu();
+                else
+                    dynamicUpdateEnabled = false;
+            }
         }
 
         void UpdateContextMenu()
@@ -50,4 +60,3 @@ namespace Michsky.UI.ModernUIPack
         }
     }
 }
-#endif

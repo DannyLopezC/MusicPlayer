@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -17,35 +16,46 @@ namespace Michsky.UI.ModernUIPack
         public TextMeshProUGUI title;
         public TextMeshProUGUI description;
 
-        void Awake()
+        bool dynamicUpdateEnabled;
+
+        void OnEnable()
         {
-            try
+            if (UIManagerAsset == null)
             {
-                if (UIManagerAsset == null)
-                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
-
-                this.enabled = true;
-
-                if (UIManagerAsset.enableDynamicUpdate == false)
+                try
                 {
-                    UpdateNotification();
-                    this.enabled = false;
+                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
+                }
+
+                catch
+                {
+                    Debug.LogWarning("No UI Manager found. Assign it manually, otherwise you'll get errors about it.", this);
                 }
             }
+        }
 
-            catch
+        void Awake()
+        {
+            if (dynamicUpdateEnabled == false)
             {
-                Debug.Log("<b>[Modern UI Pack]</b> No UI Manager found, assign it manually.", this);
+                this.enabled = true;
+                UpdateNotification();
             }
         }
 
         void LateUpdate()
         {
-            if (UIManagerAsset == null)
-                return;
+            if (Application.isEditor == true && UIManagerAsset != null)
+            {
+                if (UIManagerAsset.enableDynamicUpdate == true)
+                {
+                    dynamicUpdateEnabled = true;
+                    UpdateNotification();
+                }
 
-            if (UIManagerAsset.enableDynamicUpdate == true)
-                UpdateNotification();
+                else
+                    dynamicUpdateEnabled = false;
+            }
         }
 
         void UpdateNotification()
@@ -66,4 +76,3 @@ namespace Michsky.UI.ModernUIPack
         }
     }
 }
-#endif

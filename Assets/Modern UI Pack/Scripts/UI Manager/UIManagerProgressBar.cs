@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -18,35 +17,44 @@ namespace Michsky.UI.ModernUIPack
 
         bool dynamicUpdateEnabled;
 
-        void Awake()
+        void OnEnable()
         {
-            try
+            if (UIManagerAsset == null)
             {
-                if (UIManagerAsset == null)
-                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
-
-                this.enabled = true;
-
-                if (UIManagerAsset.enableDynamicUpdate == false)
+                try
                 {
-                    UpdateProgressBar();
-                    this.enabled = false;
+                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
+                }
+
+                catch
+                {
+                    Debug.LogWarning("No UI Manager found. Assign it manually, otherwise you'll get errors about it.", this);
                 }
             }
+        }
 
-            catch
+        void Awake()
+        {
+            if (dynamicUpdateEnabled == false)
             {
-                Debug.Log("<b>[Modern UI Pack]</b> No UI Manager found, assign it manually.", this);
+                this.enabled = true;
+                UpdateProgressBar();
             }
         }
 
         void LateUpdate()
         {
-            if (UIManagerAsset == null)
-                return;
+            if (Application.isEditor == true && UIManagerAsset != null)
+            {
+                if (UIManagerAsset.enableDynamicUpdate == true)
+                {
+                    dynamicUpdateEnabled = true;
+                    UpdateProgressBar();
+                }
 
-            if (UIManagerAsset.enableDynamicUpdate == true)
-                UpdateProgressBar();
+                else
+                    dynamicUpdateEnabled = false;
+            }
         }
 
         void UpdateProgressBar()
@@ -64,4 +72,3 @@ namespace Michsky.UI.ModernUIPack
         }
     }
 }
-#endif

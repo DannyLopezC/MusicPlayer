@@ -12,7 +12,8 @@ namespace Michsky.UI.ModernUIPack
     public class UIManagerEditor : Editor
     {
         // Variables
-        Texture2D uimLogo;
+        Texture2D muipLogo;
+
         protected static bool showAnimatedIcon = false;
         protected static bool showButton = false;
         protected static bool showContext = false;
@@ -31,9 +32,9 @@ namespace Michsky.UI.ModernUIPack
         void OnEnable()
         {
             if (EditorGUIUtility.isProSkin == true)
-                uimLogo = Resources.Load<Texture2D>("Editor\\UIM Editor Dark");
+                muipLogo = Resources.Load<Texture2D>("Editor\\MUIP Editor Dark");
             else
-                uimLogo = Resources.Load<Texture2D>("Editor\\UIM Editor Light");
+                muipLogo = Resources.Load<Texture2D>("Editor\\MUIP Editor Light");
         }
 
         public override void OnInspectorGUI()
@@ -42,34 +43,28 @@ namespace Michsky.UI.ModernUIPack
             GUISkin customSkin;
 
             if (EditorGUIUtility.isProSkin == true)
-                customSkin = (GUISkin)Resources.Load("Editor\\MUI Skin Dark");
+                customSkin = (GUISkin)Resources.Load("Editor\\Custom Skin Dark");
             else
-                customSkin = (GUISkin)Resources.Load("Editor\\MUI Skin Light");
+                customSkin = (GUISkin)Resources.Load("Editor\\Custom Skin Light");
 
             // Foldout style
             GUIStyle foldoutStyle = new GUIStyle(EditorStyles.foldout);
             foldoutStyle.font = customSkin.font;
             foldoutStyle.fontStyle = FontStyle.Normal;
             foldoutStyle.fontSize = 15;
-            foldoutStyle.margin = new RectOffset(11, 55, 6, 6);
+            foldoutStyle.margin = new RectOffset(16, 55, 6, 6);
             Vector2 contentOffset = foldoutStyle.contentOffset;
-            contentOffset.x = 5;
-            contentOffset.y = -1;
+            contentOffset.y = -4;
             foldoutStyle.contentOffset = contentOffset;
 
-            // Logo
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            GUILayout.Label(uimLogo, GUILayout.Width(250), GUILayout.Height(40));
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-            GUILayout.Space(6);
+            // Top header
+            GUILayout.Label(muipLogo, GUILayout.Width(250), GUILayout.Height(40));
 
             GUILayout.BeginVertical(EditorStyles.helpBox);
 
             // Animated Icon
             var animatedIconColor = serializedObject.FindProperty("animatedIconColor");
-            showAnimatedIcon = EditorGUILayout.Foldout(showAnimatedIcon, "Animated Icon", true, foldoutStyle);
+            showAnimatedIcon = EditorGUILayout.Foldout(showAnimatedIcon, "Animated Icon", foldoutStyle);
 
             if (showAnimatedIcon)
             {
@@ -83,7 +78,7 @@ namespace Michsky.UI.ModernUIPack
 
             GUILayout.EndVertical();
             GUILayout.Space(2);
-            GUILayout.BeginVertical(EditorStyles.helpBox);
+                                    GUILayout.BeginVertical(EditorStyles.helpBox);
 
             // Button
             var buttonTheme = serializedObject.FindProperty("buttonThemeType");
@@ -97,7 +92,7 @@ namespace Michsky.UI.ModernUIPack
             var buttonIconBasicColor = serializedObject.FindProperty("buttonIconBasicColor");
             var buttonIconColor = serializedObject.FindProperty("buttonIconColor");
             var buttonIconHighlightedColor = serializedObject.FindProperty("buttonIconHighlightedColor");
-            showButton = EditorGUILayout.Foldout(showButton, "Button", true, foldoutStyle);
+            showButton = EditorGUILayout.Foldout(showButton, "Button", foldoutStyle);
 
             if (showButton && buttonTheme.enumValueIndex == 0)
             {
@@ -199,7 +194,7 @@ namespace Michsky.UI.ModernUIPack
 
             // Context Menu
             var contextBackgroundColor = serializedObject.FindProperty("contextBackgroundColor");
-            showContext = EditorGUILayout.Foldout(showContext, "Context Menu", true, foldoutStyle);
+            showContext = EditorGUILayout.Foldout(showContext, "Context Menu", foldoutStyle);
 
             if (showContext)
             {
@@ -229,7 +224,7 @@ namespace Michsky.UI.ModernUIPack
             var dropdownItemColor = serializedObject.FindProperty("dropdownItemColor");
             var dropdownItemTextColor = serializedObject.FindProperty("dropdownItemTextColor");
             var dropdownItemIconColor = serializedObject.FindProperty("dropdownItemIconColor");
-            showDropdown = EditorGUILayout.Foldout(showDropdown, "Dropdown", true, foldoutStyle);
+            showDropdown = EditorGUILayout.Foldout(showDropdown, "Dropdown", foldoutStyle);
 
             if (showDropdown && dropdownTheme.enumValueIndex == 0)
             {
@@ -352,7 +347,7 @@ namespace Michsky.UI.ModernUIPack
             var selectorHighlightedColor = serializedObject.FindProperty("selectorHighlightedColor");
             var hSelectorInvertAnimation = serializedObject.FindProperty("hSelectorInvertAnimation");
             var hSelectorLoopSelection = serializedObject.FindProperty("hSelectorLoopSelection");
-            showHorSelector = EditorGUILayout.Foldout(showHorSelector, "Horizontal Selector", true, foldoutStyle);
+            showHorSelector = EditorGUILayout.Foldout(showHorSelector, "Horizontal Selector", foldoutStyle);
 
             if (showHorSelector)
             {
@@ -399,7 +394,7 @@ namespace Michsky.UI.ModernUIPack
             var inputFieldFont = serializedObject.FindProperty("inputFieldFont");
             var inputFieldFontSize = serializedObject.FindProperty("inputFieldFontSize");
             var inputFieldColor = serializedObject.FindProperty("inputFieldColor");
-            showInputField = EditorGUILayout.Foldout(showInputField, "Input Field", true, foldoutStyle);
+            showInputField = EditorGUILayout.Foldout(showInputField, "Input Field", foldoutStyle);
 
             if (showInputField)
             {
@@ -430,7 +425,7 @@ namespace Michsky.UI.ModernUIPack
             var modalWindowIconColor = serializedObject.FindProperty("modalWindowIconColor");
             var modalWindowBackgroundColor = serializedObject.FindProperty("modalWindowBackgroundColor");
             var modalWindowContentPanelColor = serializedObject.FindProperty("modalWindowContentPanelColor");
-            showModalWindow = EditorGUILayout.Foldout(showModalWindow, "Modal Window", true, foldoutStyle);
+            showModalWindow = EditorGUILayout.Foldout(showModalWindow, "Modal Window", foldoutStyle);
 
             if (showModalWindow)
             {
@@ -492,7 +487,7 @@ namespace Michsky.UI.ModernUIPack
             var notificationTitleColor = serializedObject.FindProperty("notificationTitleColor");
             var notificationDescriptionColor = serializedObject.FindProperty("notificationDescriptionColor");
             var notificationIconColor = serializedObject.FindProperty("notificationIconColor");
-            showNotification = EditorGUILayout.Foldout(showNotification, "Notification", true, foldoutStyle);
+            showNotification = EditorGUILayout.Foldout(showNotification, "Notification", foldoutStyle);
 
             if (showNotification)
             {
@@ -547,7 +542,7 @@ namespace Michsky.UI.ModernUIPack
             var progressBarBackgroundColor = serializedObject.FindProperty("progressBarBackgroundColor");
             var progressBarLoopBackgroundColor = serializedObject.FindProperty("progressBarLoopBackgroundColor");
             var progressBarLabelColor = serializedObject.FindProperty("progressBarLabelColor");
-            showProgressBar = EditorGUILayout.Foldout(showProgressBar, "Progress Bar", true, foldoutStyle);
+            showProgressBar = EditorGUILayout.Foldout(showProgressBar, "Progress Bar", foldoutStyle);
 
             if (showProgressBar)
             {
@@ -591,7 +586,7 @@ namespace Michsky.UI.ModernUIPack
             // Scrollbar
             var scrollbarColor = serializedObject.FindProperty("scrollbarColor");
             var scrollbarBackgroundColor = serializedObject.FindProperty("scrollbarBackgroundColor");
-            showScrollbar = EditorGUILayout.Foldout(showScrollbar, "Scrollbar", true, foldoutStyle);
+            showScrollbar = EditorGUILayout.Foldout(showScrollbar, "Scrollbar", foldoutStyle);
 
             if (showScrollbar)
             {
@@ -622,7 +617,7 @@ namespace Michsky.UI.ModernUIPack
             var sliderPopupLabelColor = serializedObject.FindProperty("sliderPopupLabelColor");
             var sliderHandleColor = serializedObject.FindProperty("sliderHandleColor");
             var sliderBackgroundColor = serializedObject.FindProperty("sliderBackgroundColor");
-            showSlider = EditorGUILayout.Foldout(showSlider, "Slider", true, foldoutStyle);
+            showSlider = EditorGUILayout.Foldout(showSlider, "Slider", foldoutStyle);
 
             if (showSlider && sliderThemeType.enumValueIndex == 0)
             {
@@ -715,7 +710,7 @@ namespace Michsky.UI.ModernUIPack
             var switchBackgroundColor = serializedObject.FindProperty("switchBackgroundColor");
             var switchHandleOnColor = serializedObject.FindProperty("switchHandleOnColor");
             var switchHandleOffColor = serializedObject.FindProperty("switchHandleOffColor");
-            showSwitch = EditorGUILayout.Foldout(showSwitch, "Switch", true, foldoutStyle);
+            showSwitch = EditorGUILayout.Foldout(showSwitch, "Switch", foldoutStyle);
 
             if (showSwitch)
             {
@@ -756,7 +751,7 @@ namespace Michsky.UI.ModernUIPack
             var toggleBorderColor = serializedObject.FindProperty("toggleBorderColor");
             var toggleBackgroundColor = serializedObject.FindProperty("toggleBackgroundColor");
             var toggleCheckColor = serializedObject.FindProperty("toggleCheckColor");
-            showToggle = EditorGUILayout.Foldout(showToggle, "Toggle", true, foldoutStyle);
+            showToggle = EditorGUILayout.Foldout(showToggle, "Toggle", foldoutStyle);
 
             if (showToggle)
             {
@@ -802,7 +797,7 @@ namespace Michsky.UI.ModernUIPack
             var tooltipFontSize = serializedObject.FindProperty("tooltipFontSize");
             var tooltipTextColor = serializedObject.FindProperty("tooltipTextColor");
             var tooltipBackgroundColor = serializedObject.FindProperty("tooltipBackgroundColor");
-            showTooltip = EditorGUILayout.Foldout(showTooltip, "Tooltip", true, foldoutStyle);
+            showTooltip = EditorGUILayout.Foldout(showTooltip, "Tooltip", foldoutStyle);
 
             if (showTooltip)
             {
@@ -827,7 +822,6 @@ namespace Michsky.UI.ModernUIPack
                 GUILayout.EndHorizontal();
             }
 
-            // Settings
             GUILayout.EndVertical();
             GUILayout.Space(7);
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -853,56 +847,25 @@ namespace Michsky.UI.ModernUIPack
 
             if (enableExtendedColorPicker.boolValue == true)
                 EditorPrefs.SetInt("UIManager.EnableExtendedColorPicker", 1);
+
             else
                 EditorPrefs.SetInt("UIManager.EnableExtendedColorPicker", 0);
 
             var editorHints = serializedObject.FindProperty("editorHints");
 
-            GUILayout.BeginVertical(EditorStyles.helpBox);
+            GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-            editorHints.boolValue = GUILayout.Toggle(editorHints.boolValue, new GUIContent("UI Manager Hints"), customSkin.FindStyle("Toggle"), GUILayout.Width(500));
+            editorHints.boolValue = GUILayout.Toggle(editorHints.boolValue, new GUIContent("UI Manager Hints"), customSkin.FindStyle("Toggle"));
+            editorHints.boolValue = GUILayout.Toggle(editorHints.boolValue, new GUIContent(""), customSkin.FindStyle("Toggle Helper"));
+
+            GUILayout.EndHorizontal();
 
             if (editorHints.boolValue == true)
             {
                 EditorGUILayout.HelpBox("These values are universal and will affect any object that contains 'UI Manager' component.", MessageType.Info);
-                EditorGUILayout.HelpBox("Remove 'UI Manager' component from the object if want to assign unique values.", MessageType.Info);
+                EditorGUILayout.HelpBox("Remove 'UI Manager' component from the object in order to get unique values.", MessageType.Info);
 				EditorGUILayout.HelpBox("You can press 'CTRL + SHIFT + M' to open UI Manager quickly.", MessageType.Info);
             }
-
-            GUILayout.EndVertical();
-
-            var rootFolder = serializedObject.FindProperty("rootFolder");
-            var changeRootFolder = serializedObject.FindProperty("changeRootFolder");
-
-            GUILayout.BeginVertical(EditorStyles.helpBox);
-
-            changeRootFolder.boolValue = GUILayout.Toggle(changeRootFolder.boolValue, new GUIContent("Change Root Folder"), customSkin.FindStyle("Toggle"), GUILayout.Width(500));
-
-            if (changeRootFolder.boolValue == true)
-            {
-                EditorGUI.indentLevel = 2;
-                GUILayout.BeginHorizontal();
-
-                EditorGUILayout.LabelField(new GUIContent("Root Folder:"), customSkin.FindStyle("Text"), GUILayout.Width(76));
-                EditorGUILayout.PropertyField(rootFolder, new GUIContent(""));
-
-                GUILayout.EndHorizontal();
-                GUILayout.Space(2);
-                GUILayout.BeginHorizontal();
-                GUILayout.FlexibleSpace();
-
-                if (GUILayout.Button("Apply", customSkin.button, GUILayout.Width(120)))
-                    EditorPrefs.SetString("UIManager.RootFolder", rootFolder.stringValue);
-
-                GUILayout.EndHorizontal();
-                GUILayout.Space(2);
-                EditorGUI.indentLevel = 0;
-                EditorGUILayout.HelpBox("Use this option only if you're moving Modern UI Pack folder. " +
-                    "Make sure to hit apply after changing the root. " +
-                    "Example: Parent Folders/Modern UI Pack/Prefabs.", MessageType.Warning);
-            }
-
-            GUILayout.EndVertical();
 
             serializedObject.ApplyModifiedProperties();
 
@@ -916,6 +879,7 @@ namespace Michsky.UI.ModernUIPack
             GUILayout.Space(5);
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
+            // Apply & Update button
             GUILayout.Space(4);
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal();
@@ -942,6 +906,9 @@ namespace Michsky.UI.ModernUIPack
 
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
+
+            GUILayout.Space(12);
+            GUILayout.Label("Loved the package and wanna support us even more?", customSkin.FindStyle("Text"));
 
             if (GUILayout.Button("Write a review", customSkin.button))
                 Review();
@@ -981,12 +948,12 @@ namespace Michsky.UI.ModernUIPack
                     Preset defaultPreset = Resources.Load<Preset>("UI Manager Presets/Default");
                     defaultPreset.ApplyTo(Resources.Load("MUIP Manager"));
                     Selection.activeObject = null;
-                    Debug.Log("<b>[UI Manager]</b> Resetting successful.");
+                    Debug.Log("UI Manager - Resetting successful.");
                 }
 
                 catch
                 {
-                    Debug.LogWarning("<b>[UI Manager]</b> Resetting failed.");
+                    Debug.LogWarning("UI Manager - Resetting failed.");
                 }
             }    
         }

@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,35 +14,46 @@ namespace Michsky.UI.ModernUIPack
         public List<GameObject> images = new List<GameObject>();
         public List<GameObject> imagesWithAlpha = new List<GameObject>();
 
-        void Awake()
+        bool dynamicUpdateEnabled;
+
+        void OnEnable()
         {
-            try
+            if (UIManagerAsset == null)
             {
-                if (UIManagerAsset == null)
-                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
-
-                this.enabled = true;
-
-                if (UIManagerAsset.enableDynamicUpdate == false)
+                try
                 {
-                    UpdateAnimatedIcon();
-                    this.enabled = false;
+                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
+                }
+
+                catch
+                {
+                    Debug.Log("No UI Manager found. Assign it manually, otherwise you'll get errors about it.", this);
                 }
             }
+        }
 
-            catch
+        void Awake()
+        {
+            if (dynamicUpdateEnabled == false)
             {
-                Debug.Log("<b>[Modern UI Pack]</b> No UI Manager found, assign it manually.", this);
+                this.enabled = true;
+                UpdateAnimatedIcon();
             }
         }
 
         void LateUpdate()
         {
-            if (UIManagerAsset == null)
-                return;
+            if (Application.isEditor == true && UIManagerAsset != null)
+            {
+                if (UIManagerAsset.enableDynamicUpdate == true)
+                {
+                    dynamicUpdateEnabled = true;
+                    UpdateAnimatedIcon();
+                }
 
-            if (UIManagerAsset.enableDynamicUpdate == true)
-                UpdateAnimatedIcon();
+                else
+                    dynamicUpdateEnabled = false;
+            }
         }
 
         void UpdateAnimatedIcon()
@@ -62,4 +72,3 @@ namespace Michsky.UI.ModernUIPack
         }
     }
 }
-#endif

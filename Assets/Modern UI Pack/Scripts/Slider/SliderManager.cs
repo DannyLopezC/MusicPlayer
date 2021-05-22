@@ -6,7 +6,6 @@ using TMPro;
 
 namespace Michsky.UI.ModernUIPack
 {
-    [RequireComponent(typeof(Slider))]
     public class SliderManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         // Resources
@@ -16,7 +15,7 @@ namespace Michsky.UI.ModernUIPack
 
         // Saving
         public bool enableSaving = false;
-        public string sliderTag = "My Slider";
+        public string sliderTag = "Tag Text";
 
         // Settings
         public bool usePercent = false;
@@ -39,37 +38,37 @@ namespace Michsky.UI.ModernUIPack
         {
             try
             {
+                sliderAnimator = gameObject.GetComponent<Animator>();
+
                 if (enableSaving == true)
                 {
-                    if (PlayerPrefs.HasKey(sliderTag + "MUIPSliderValue") == false)
+                    if (PlayerPrefs.HasKey(sliderTag + "SliderValue") == false)
                         saveValue = mainSlider.value;
                     else
-                        saveValue = PlayerPrefs.GetFloat(sliderTag + "MUIPSliderValue");
+                        saveValue = PlayerPrefs.GetFloat(sliderTag + "SliderValue");
 
                     mainSlider.value = saveValue;
+
                     mainSlider.onValueChanged.AddListener(delegate
                     {
                         saveValue = mainSlider.value;
-                        PlayerPrefs.SetFloat(sliderTag + "MUIPSliderValue", saveValue);
+                        PlayerPrefs.SetFloat(sliderTag + "SliderValue", saveValue);
                     });
                 }
 
                 mainSlider.onValueChanged.AddListener(delegate 
                 {
                     sliderEvent.Invoke(mainSlider.value);
-                    UpdateUI();
                 });
-
-                if (sliderAnimator == null)
-                    sliderAnimator = gameObject.GetComponent<Animator>();
             }
 
-            catch { }
-
-            UpdateUI();
+            catch
+            {
+                Debug.LogError("Slider - Cannot initalize the object due to missing components.");
+            }
         }
 
-        public void UpdateUI()
+        void Update()
         {
             if (useRoundValue == true)
             {

@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Michsky.UI.ModernUIPack
@@ -14,35 +13,46 @@ namespace Michsky.UI.ModernUIPack
         public Image background;
         public Image bar;
 
-        void Awake()
+        bool dynamicUpdateEnabled;
+
+        void OnEnable()
         {
-            try
+            if (UIManagerAsset == null)
             {
-                if (UIManagerAsset == null)
-                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
-
-                this.enabled = true;
-
-                if (UIManagerAsset.enableDynamicUpdate == false)
+                try
                 {
-                    UpdateScrollbar();
-                    this.enabled = false;
+                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
+                }
+
+                catch
+                {
+                    Debug.LogWarning("No UI Manager found. Assign it manually, otherwise you'll get errors about it.", this);
                 }
             }
+        }
 
-            catch
+        void Awake()
+        {
+            if (dynamicUpdateEnabled == false)
             {
-                Debug.Log("<b>[Modern UI Pack]</b> No UI Manager found, assign it manually.", this);
+                this.enabled = true;
+                UpdateScrollbar();
             }
         }
 
         void LateUpdate()
         {
-            if (UIManagerAsset == null)
-                return;
+            if (UIManagerAsset != null)
+            {
+                if (Application.isEditor == true && UIManagerAsset != null)
+                {
+                    dynamicUpdateEnabled = true;
+                    UpdateScrollbar();
+                }
 
-            if (UIManagerAsset.enableDynamicUpdate == true)
-                UpdateScrollbar();
+                else
+                    dynamicUpdateEnabled = false;
+            }
         }
 
         void UpdateScrollbar()
@@ -57,4 +67,3 @@ namespace Michsky.UI.ModernUIPack
         }
     }
 }
-#endif

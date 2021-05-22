@@ -1,59 +1,83 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using TMPro;
+using UnityEngine.EventSystems;
 
 namespace Michsky.UI.ModernUIPack
 {
-    [RequireComponent(typeof(TMP_InputField))]
-    [RequireComponent(typeof(Animator))]
-    public class CustomInputField : MonoBehaviour
+    public class CustomInputField : MonoBehaviour, IPointerClickHandler
     {
-        // Resources
+        [Header("RESOURCES")]
+        public GameObject fieldTrigger;
         [HideInInspector] public TMP_InputField inputText;
         [HideInInspector] public Animator inputFieldAnimator;
 
-        // Hidden variables
-        private string inAnim = "In";
-        private string outAnim = "Out";
+        // [Header("SETTINGS")]
+        [HideInInspector] public bool isEmpty = true;
+        [HideInInspector] public bool isClicked = false;
+        [HideInInspector] public string inAnim = "In";
+        [HideInInspector] public string outAnim = "Out";
 
         void Start()
         {
-            if (inputText == null)
-                inputText = gameObject.GetComponent<TMP_InputField>();
+            inputFieldAnimator = gameObject.GetComponent<Animator>();
+            inputText = gameObject.GetComponent<TMP_InputField>();
 
-            if (inputFieldAnimator == null)
-                inputFieldAnimator = gameObject.GetComponent<Animator>();
+            // Check if text is empty or not
+            if (inputText.text.Length == 0 || inputText.text.Length <= 0)
+                isEmpty = true;
 
-            inputText.onSelect.AddListener(delegate { AnimateIn(); });
-            inputText.onEndEdit.AddListener(delegate { AnimateOut(); });
-            UpdateState();
-        }
-
-        void OnEnable()
-        {
-            if (inputText == null)
-                return;
-
-            inputText.ForceLabelUpdate();
-            UpdateState();
-        }
-
-        public void AnimateIn()
-        {
-            inputFieldAnimator.Play(inAnim);
-        }
-
-        public void AnimateOut()
-        {
-            if (inputText.text.Length == 0)
-                inputFieldAnimator.Play(outAnim);
-        }
-
-        public void UpdateState()
-        {
-            if (inputText.text.Length == 0)
-                AnimateOut();
             else
-                AnimateIn();
+                isEmpty = false;
+
+            // Animate if it's empty
+            if (isEmpty == true)
+                inputFieldAnimator.Play(outAnim);
+
+            else
+                inputFieldAnimator.Play(inAnim);
+        }
+
+        void Update()
+        {
+            if (inputText.text.Length == 1 || inputText.text.Length >= 1)
+            {
+                isEmpty = false;
+                inputFieldAnimator.Play(inAnim);
+            }
+
+            else if (isClicked == false)
+            {
+                inputFieldAnimator.Play(outAnim);
+            }
+        }
+
+        public void Animate()
+        {
+            isClicked = true;
+            inputFieldAnimator.Play(inAnim);
+            fieldTrigger.SetActive(true);
+        }
+
+        public void FieldTrigger()
+        {
+            if (isEmpty == true)
+            {
+                inputFieldAnimator.Play(outAnim);
+                fieldTrigger.SetActive(false);
+                isClicked = false;
+            }
+
+            else
+            {
+                fieldTrigger.SetActive(false);
+                isClicked = false;
+            }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            Animate();
         }
     }
 }

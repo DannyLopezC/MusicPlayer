@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -16,40 +15,55 @@ namespace Michsky.UI.ModernUIPack
         public List<GameObject> images = new List<GameObject>();
         public List<GameObject> imagesHighlighted = new List<GameObject>();
         public List<GameObject> texts = new List<GameObject>();
+
+        bool dynamicUpdateEnabled;
         HorizontalSelector hSelector;
 
-        void Awake()
+        void OnEnable()
         {
             try
             {
-                if (hSelector == null)
-                    hSelector = gameObject.GetComponent<HorizontalSelector>();
-
-                if (UIManagerAsset == null)
-                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
-
-                this.enabled = true;
-
-                if (UIManagerAsset.enableDynamicUpdate == false)
-                {
-                    UpdateSelector();
-                    this.enabled = false;
-                }
+                hSelector = gameObject.GetComponent<HorizontalSelector>();
             }
 
-            catch
+            catch { }
+
+            if (UIManagerAsset == null)
             {
-                Debug.Log("<b>[Modern UI Pack]</b> No UI Manager found, assign it manually.", this);
+                try
+                {
+                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
+                }
+
+                catch
+                {
+                    Debug.LogWarning("No UI Manager found. Assign it manually, otherwise you'll get errors about it.", this);
+                }
+            }
+        }
+
+        void Awake()
+        {
+            if (dynamicUpdateEnabled == false)
+            {
+                this.enabled = true;
+                UpdateSelector();
             }
         }
 
         void LateUpdate()
         {
-            if (UIManagerAsset == null)
-                return;
+            if (Application.isEditor == true && UIManagerAsset != null)
+            {
+                if (UIManagerAsset.enableDynamicUpdate == true)
+                {
+                    dynamicUpdateEnabled = true;
+                    UpdateSelector();
+                }
 
-            if (UIManagerAsset.enableDynamicUpdate == true)
-                UpdateSelector();
+                else
+                    dynamicUpdateEnabled = false;
+            }
         }
 
         void UpdateSelector()
@@ -82,4 +96,3 @@ namespace Michsky.UI.ModernUIPack
         }
     }
 }
-#endif

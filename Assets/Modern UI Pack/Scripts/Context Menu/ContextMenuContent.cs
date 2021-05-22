@@ -8,7 +8,6 @@ using TMPro;
 
 namespace Michsky.UI.ModernUIPack
 {
-    [AddComponentMenu("Modern UI Pack/Context Menu/Context Menu Content")]
     public class ContextMenuContent : MonoBehaviour, IPointerClickHandler
     {
         [Header("RESOURCES")]
@@ -57,7 +56,9 @@ namespace Michsky.UI.ModernUIPack
             } 
 
             foreach (Transform child in itemParent)
-                Destroy(child.gameObject);
+            {
+                GameObject.Destroy(child.gameObject);
+            }
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -71,7 +72,9 @@ namespace Michsky.UI.ModernUIPack
             else if (eventData.button == PointerEventData.InputButton.Right && contextManager.isContextMenuOn == false)
             {
                 foreach (Transform child in itemParent)
-                    Destroy(child.gameObject);
+                {
+                    GameObject.Destroy(child.gameObject);
+                }
 
                 for (int i = 0; i < contexItems.Count; ++i)
                 {

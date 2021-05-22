@@ -6,11 +6,11 @@ namespace Michsky.UI.ModernUIPack
     public class RangeSlider : MonoBehaviour
     {
         [Header("SETTINGS")]
-        [Range(0,2)] public int decimalPlaces = 0;
+        [Range(0,2)] public int DecimalPlaces = 0;
         public float minValue = 0;
         public float maxValue = 1;
+        public bool useWholeNumbers = false;
         public bool showLabels = true;
-        public bool useWholeNumbers = true;
 
         [Header("MIN SLIDER")]
         public RangeMinSlider minSlider;
@@ -20,20 +20,25 @@ namespace Michsky.UI.ModernUIPack
         public RangeMaxSlider maxSlider;
         public TextMeshProUGUI maxSliderLabel;
 
-        public float CurrentLowerValue { get { return minSlider.value; } }
-        public float CurrentUpperValue { get { return maxSlider.realValue; } }
+        // Properties
+        public float CurrentLowerValue
+        {
+            get { return minSlider.value; }
+        }
+        public float CurrentUpperValue
+        {
+            get { return maxSlider.realValue; }
+        }
 
         void Awake()
         {
-            if (minSlider == null || maxSlider == null)
-                return;
-
-            if (showLabels == true)
+            // Define if we use indicators
+            if (showLabels)
             {
                 minSlider.label = minSliderLabel;
-                minSlider.numberFormat = "n" + decimalPlaces;
+                minSlider.numberFormat = "n" + DecimalPlaces;
                 maxSlider.label = maxSliderLabel;
-                maxSlider.numberFormat = "n" + decimalPlaces;
+                maxSlider.numberFormat = "n" + DecimalPlaces;
             }
 
             else
@@ -42,27 +47,14 @@ namespace Michsky.UI.ModernUIPack
                 maxSliderLabel.gameObject.SetActive(false);
             }
 
-            if (useWholeNumbers == true)
-            {
-                minSlider.wholeNumbers = false;
-                maxSlider.wholeNumbers = false;
-            }
-
+            // Adjust Max/Min values for both sliders
             minSlider.minValue = minValue;
             minSlider.maxValue = maxValue;
-            minSlider.onValueChanged.AddListener(CheckForMinState);
+            minSlider.wholeNumbers = useWholeNumbers;
 
             maxSlider.minValue = minValue;
             maxSlider.maxValue = maxValue;
-        }
-
-        public void CheckForMinState(float value)
-        {
-            if (minSlider.value >= maxSlider.realValue)
-            {
-                maxSlider.realValue = minSlider.value;
-                minSlider.value = maxSlider.realValue - 1;
-            }
+            maxSlider.wholeNumbers = useWholeNumbers;
         }
     }
 }

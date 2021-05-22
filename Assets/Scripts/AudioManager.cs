@@ -79,6 +79,7 @@ namespace MusicPlayer
 
         public void Next()
         {
+            Debug.Log($"next");
             string currentSongName = source.clip.name;
 
             for (int i = 0; i < currentPlaylist.musicList.Count; i++)
@@ -98,6 +99,7 @@ namespace MusicPlayer
 
         public void Back()
         {
+            Debug.Log($"back");
             string currentSongName = source.clip.name;
 
             for (int i = 0; i < currentPlaylist.musicList.Count; i++)
