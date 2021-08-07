@@ -18,7 +18,6 @@ namespace MusicPlayer
 
         public string playListName;
         public int id;
-        [InlineEditor]
         public List<Song> musicList;
 
         [Button]

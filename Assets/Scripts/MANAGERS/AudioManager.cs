@@ -2,62 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.UI;
+using Sirenix.OdinInspector;
 
 namespace MusicPlayer
 {
     [RequireComponent(typeof(AudioSource))]
     public class AudioManager : MonoBehaviour
     {
+        [InlineEditor]
         public List<Playlist> playLists;
         public AudioSource source;
 
         public int currentPlaylistId = 0;
-        Playlist currentPlaylist;
-        Playlist.Song currentSong;
+        [ReadOnly]
+        public Playlist currentPlaylist;
+        [ReadOnly]
+        public Playlist.Song currentSong;
 
-        public Text title, timer;
 
-        private void Start()
+        private void Awake()
         {
             currentPlaylist = playLists[currentPlaylistId];
             currentSong = currentPlaylist.musicList[0];
             source = GetComponent<AudioSource>();
             source.clip = currentSong.audioClip;
-            title.text = currentSong.songName;
             //Play();
         }
 
-        private void Update()
-        {
-            SetTimer();
-
-
-        }
-
-        public void SetTimer()
-        {
-            if (source != null)
-            {
-                int minutes = (int)source.time / 60;
-                int seconds = (int)source.time % 60;
-
-                timer.text = $"{minutes.ToString("00")}:{seconds.ToString("00")}";
-            }
-        }
-
+        [Button, HorizontalGroup("Buttons")]
         public void Play()
         {
-            Debug.Log($"play");
 
             if (source.clip == null)
             {
                 Debug.Log($"Null song");
-                title.text = "Null song";
                 return;
             }
 
-            title.text = currentSong.songName;
             if (!source.isPlaying)
             {
                 source.Play();
@@ -71,12 +52,14 @@ namespace MusicPlayer
             }
         }
 
+        [Button, HorizontalGroup("Buttons")]
         public void Stop()
         {
             CancelInvoke("Next");
             source.Stop();
         }
 
+        [Button, HorizontalGroup("Buttons")]
         public void Next()
         {
             Debug.Log($"next");
@@ -97,6 +80,7 @@ namespace MusicPlayer
             Play();
         }
 
+        [Button, HorizontalGroup("Buttons")]
         public void Back()
         {
             Debug.Log($"back");
