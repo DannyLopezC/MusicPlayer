@@ -1,73 +1,46 @@
-Modern UI Pack - v4.2.0
+Modern UI Pack - v5.0.0
 
-Import TextMesh Pro and its essentials from Package Manager if you haven't already!
+Make sure to update TextMesh Pro to the latest version and import its essentials.
+Online documentation: https://docs.michsky.com/docs/modern-ui-pack/
 
 Contact me via:
 E-mail: support@michsky.com
-Website: https://www.michsky.com
 Discord: https://discord.gg/VXpHyUt
+Twitter: https://twitter.com/michskyHQ
 YouTube: https://www.youtube.com/c/michsky
-Steam: https://steamcommunity.com/id/geezjesus
-Unity Connect: https://connect.unity.com/u/isa-kocak
+Reddit: https://www.reddit.com/u/michsky
+Website: https://www.michsky.com
 
-Special thanks to:
-Geno (Contributor)
-Filmos (Tester)
-Kabbouchi (Tester)
-Takashi Sakai
+Changelog v5.0.0
+----------------------------------------
+[Dropdown]
+• Added item layout options
+• Added RemoveItem() function
+• Re-made multi selectable dropdown
 
-Changelog v4.2.1
-----------------------------------------
-• Added sound settings to dropdown
-• Added sound settings to switch
-• Added hover event to button
-• Improved window manager
-• Fixed lots of small things
-----------------------------------------
+[Horizontal Selector]
+• Added icon support
+• Added item layout options
+• Added RemoveItem() function
 
-Changelog v4.2.0
-----------------------------------------
-• Added context menu (beta)
-• Added border detection
-• UI Manager changes and optimization
-----------------------------------------
+[Pie Chart]
+• Added indicator creator
+• Improved editor sync
 
-Changelog v4.1.2
-----------------------------------------
-• Improved Dropdown item creation
-• Improved UI Manager look
-• Fixed minor issues
-----------------------------------------
+[Progress Bar]
+• Added prefix and suffix options
+• Improved editor sync
 
-Changelog v4.1.1
-----------------------------------------
-• Added notification stacking
-• Fixed minor bugs
-----------------------------------------
+[Window Manager]
+• Implemented window creator
 
-Changelog v4.1.0
-----------------------------------------
-• Added button sound feature
-• Improved documentation
-• Improved editor look
-• Improved tooltip system
-• Improved undo system
-----------------------------------------
-
-Changelog v4.0.0
-----------------------------------------
-• New demo scene
-• New documentation
-• New inspector layout
-• New UI manager layout
-• Added dynamic event to dropdown
-• Added dynamic event to horizontal selector
-• Added movable / draggable window
-• Added realtime object preview
-• Added tutorial links
-• Added window manager
-• Improved editor UI / UX
-• Improved null notifier
-• Improved optimization
-• Fixed switch saving system
+[Other Changes]
+• Added inspector headers for readability
+• Added UI Manager indicator for components
+• Extended demo scene
+• Extended documentation
+• Improved input system support
+• Improved resource usage
+• Major editor layout improvements
+• Major scripting improvements
 ----------------------------------------

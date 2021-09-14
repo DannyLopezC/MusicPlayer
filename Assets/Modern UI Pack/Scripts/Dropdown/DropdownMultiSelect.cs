@@ -8,7 +8,7 @@ using TMPro;
 
 namespace Michsky.UI.ModernUIPack
 {
-    public class DropdownMultiSelect : MonoBehaviour
+    public class DropdownMultiSelect : MonoBehaviour, IPointerExitHandler
     {
         // Resources
         public GameObject triggerObject;
@@ -29,6 +29,11 @@ namespace Michsky.UI.ModernUIPack
         public bool outOnPointerExit = false;
         public bool isListItem = false;
         public AnimationType animationType;
+        [Range(1, 50)] public int itemPaddingTop = 8;
+        [Range(1, 50)] public int itemPaddingBottom = 8;
+        [Range(1, 50)] public int itemPaddingLeft = 8;
+        [Range(1, 50)] public int itemPaddingRight = 25;
+        [Range(1, 50)] public int itemSpacing = 8;
 
         // Saving
         public bool saveSelected = false;
@@ -42,10 +47,10 @@ namespace Michsky.UI.ModernUIPack
         // Other variables
         string textHelper;
         string newItemTitle;
-        Sprite newItemIcon;
         bool isOn;
         public int iHelper = 0;
         public int siblingIndex = 0;
+        EventTrigger triggerEvent;
 
         [System.Serializable]
         public class ToggleEvent : UnityEvent<bool> { }
@@ -62,45 +67,50 @@ namespace Michsky.UI.ModernUIPack
         {
             public string itemName = "Dropdown Item";
             public bool isOn = false;
-            [SerializeField] public ToggleEvent toggleEvents;
+            [SerializeField] public ToggleEvent onValueChanged = new ToggleEvent();
         }
 
         void Start()
         {
             try
             {
-                dropdownAnimator = this.GetComponent<Animator>();
-                itemList = itemParent.GetComponent<VerticalLayoutGroup>();
-                itemList = itemParent.GetComponent<VerticalLayoutGroup>();
-                SetupDropdown();
+                if (itemList == null)
+                    itemList = itemParent.GetComponent<VerticalLayoutGroup>();
+
+                if (dropdownItems.Count != 0)
+                    SetupDropdown();
+
                 currentListParent = transform.parent;
+
+                if (enableTrigger == true && triggerObject != null)
+                {
+                    // triggerButton = gameObject.GetComponent<Button>();
+                    triggerEvent = triggerObject.AddComponent<EventTrigger>();
+                    EventTrigger.Entry entry = new EventTrigger.Entry();
+                    entry.eventID = EventTriggerType.PointerClick;
+                    entry.callback.AddListener((eventData) => { Animate(); });
+                    triggerEvent.GetComponent<EventTrigger>().triggers.Add(entry);
+                }
             }
 
-            catch
-            {
-                Debug.LogError("Dropdown - Cannot initalize the object due to missing resources.", this);
-            }
+            catch { Debug.LogError("<b>[Dropdown]</b> Cannot initalize the object due to missing resources.", this); return; }
 
-            if (enableScrollbar == true)
-            {
-                itemList.padding.right = 25;
-                scrollbar.SetActive(true);
-            }
+            if (dropdownAnimator == null)
+                dropdownAnimator = gameObject.GetComponent<Animator>();
 
-            else
-            {
-                itemList.padding.right = 8;
+            if (enableScrollbar == false && scrollbar != null)
                 Destroy(scrollbar);
-            }
 
             if (setHighPriorty == true)
                 transform.SetAsLastSibling();
+
+            UpdateItemLayout();
         }
 
         public void SetupDropdown()
         {
             foreach (Transform child in itemParent)
-                GameObject.Destroy(child.gameObject);
+                Destroy(child.gameObject);
 
             for (int i = 0; i < dropdownItems.Count; ++i)
             {
@@ -116,24 +126,24 @@ namespace Michsky.UI.ModernUIPack
 
                 iHelper = i;
 
-                itemToggle.onValueChanged.AddListener(UpdateToggle);
+                itemToggle.onValueChanged.AddListener(delegate { UpdateToggle(go.transform.GetSiblingIndex()); });
+              //  ChangeDropdownInfo(index = go.transform.GetSiblingIndex());
 
-                if (dropdownItems[i].toggleEvents != null)
-                    itemToggle.onValueChanged.AddListener(dropdownItems[i].toggleEvents.Invoke);
+                if (dropdownItems[i].onValueChanged != null)
+                    itemToggle.onValueChanged.AddListener(dropdownItems[i].onValueChanged.Invoke);
 
                 if (saveSelected == true)
                 {
                     if (invokeAtStart == true)
                     {
-                        if (PlayerPrefs.GetInt(toggleTag + "Toggle") == 1)
-                            dropdownItems[i].toggleEvents.Invoke(true);
-
+                        if (PlayerPrefs.GetInt("DropdownMS" + toggleTag) == 1)
+                            dropdownItems[i].onValueChanged.Invoke(true);
                         else
-                            dropdownItems[i].toggleEvents.Invoke(false);
+                            dropdownItems[i].onValueChanged.Invoke(false);
                     }
 
                     else
-                        itemToggle.onValueChanged.AddListener(SaveToggle);
+                        itemToggle.onValueChanged.AddListener(SaveToggleData);
                 }
 
                 else
@@ -141,10 +151,9 @@ namespace Michsky.UI.ModernUIPack
                     if (invokeAtStart == true)
                     {
                         if (dropdownItems[i].isOn == true)
-                            dropdownItems[i].toggleEvents.Invoke(true);
-
+                            dropdownItems[i].onValueChanged.Invoke(true);
                         else
-                            dropdownItems[i].toggleEvents.Invoke(false);
+                            dropdownItems[i].onValueChanged.Invoke(false);
                     }
 
                     else
@@ -159,31 +168,29 @@ namespace Michsky.UI.ModernUIPack
                 if (invokeAtStart == true)
                 {
                     if (dropdownItems[i].isOn == true)
-                        dropdownItems[i].toggleEvents.Invoke(true);
-
+                        dropdownItems[i].onValueChanged.Invoke(true);
                     else
-                        dropdownItems[i].toggleEvents.Invoke(false);
+                        dropdownItems[i].onValueChanged.Invoke(false);
                 }
             }
 
             currentListParent = transform.parent;
         }
 
-        public void UpdateToggle(bool isOn)
+        void UpdateToggle(int itemIndex)
         {
-            //   if (isOn)
-            //         dropdownItems[iHelper].isOn = true;
-            //      else
-            //
-            //        dropdownItems[iHelper].isOn = false;
+            if (dropdownItems[itemIndex].isOn == true)
+                dropdownItems[itemIndex].isOn = false;
+            else
+                dropdownItems[itemIndex].isOn = true;
         }
 
-        public void SaveToggle(bool isOn)
+        void SaveToggleData(bool isOn)
         {
             if (isOn == true)
-                PlayerPrefs.SetInt(toggleTag + "Toggle" + iHelper, 1);
+                PlayerPrefs.SetInt("DropdownMS" + toggleTag + iHelper, 1);
             else
-                PlayerPrefs.SetInt(toggleTag + "Toggle" + iHelper, 0);
+                PlayerPrefs.SetInt("DropdownMS" + toggleTag + iHelper, 0);
         }
 
         public void Animate()
@@ -259,47 +266,16 @@ namespace Michsky.UI.ModernUIPack
                 }
             }
 
+            if (setHighPriorty == true)
+                transform.SetAsLastSibling();
+
             if (enableTrigger == true && isOn == false)
                 triggerObject.SetActive(false);
-
             else if (enableTrigger == true && isOn == true)
                 triggerObject.SetActive(true);
 
-            if (outOnPointerExit == true)
+            if (enableTrigger == true && outOnPointerExit == true)
                 triggerObject.SetActive(false);
-
-            if (setHighPriorty == true)
-                transform.SetAsLastSibling();
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            if (outOnPointerExit == true)
-            {
-                if (isOn == true)
-                {
-                    Animate();
-                    isOn = false;
-                }
-
-                if (isListItem == true)
-                    gameObject.transform.SetParent(currentListParent, true);
-            }
-        }
-
-        public void UpdateValues()
-        {
-            if (enableScrollbar == true)
-            {
-                itemList.padding.right = 25;
-                scrollbar.SetActive(true);
-            }
-
-            else
-            {
-                itemList.padding.right = 8;
-                scrollbar.SetActive(false);
-            }
         }
 
         public void CreateNewItem()
@@ -310,15 +286,41 @@ namespace Michsky.UI.ModernUIPack
             SetupDropdown();
         }
 
-        public void SetItemTitle(string title)
+        public void RemoveItem(string itemTitle)
         {
-            newItemTitle = title;
+            var item = dropdownItems.Find(x => x.itemName == itemTitle);
+            dropdownItems.Remove(item);
+            SetupDropdown();
         }
 
         public void AddNewItem()
         {
             Item item = new Item();
             dropdownItems.Add(item);
+        }
+
+        public void UpdateItemLayout()
+        {
+            if (itemList != null)
+            {
+                itemList.spacing = itemSpacing;
+                itemList.padding.top = itemPaddingTop;
+                itemList.padding.bottom = itemPaddingBottom;
+                itemList.padding.left = itemPaddingLeft;
+                itemList.padding.right = itemPaddingRight;
+            }
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (outOnPointerExit == true && isOn == true)
+            {
+                Animate();
+                isOn = false;
+
+                if (isListItem == true)
+                    gameObject.transform.SetParent(currentListParent, true);
+            }
         }
     }
 }

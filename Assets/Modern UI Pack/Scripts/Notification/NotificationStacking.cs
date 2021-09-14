@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace Michsky.UI.ModernUIPack
 {
+    [AddComponentMenu("Modern UI Pack/Notification/Notification Stacking")]
     public class NotificationStacking : MonoBehaviour
     {
-        [HideInInspector] public List<NotificationManager> notifications = new List<NotificationManager>();
+        public List<NotificationManager> notifications = new List<NotificationManager>();
         [HideInInspector] public bool enableUpdating = false;
 
-        [Header("SETTINGS")]
+        [Header("Settings")]
         public float delay = 1;
         int currentNotification = 0;
 
@@ -25,6 +26,7 @@ namespace Michsky.UI.ModernUIPack
                     {
                         notifications[currentNotification].OpenNotification();
                         StartCoroutine("StartNotification");
+                        enableUpdating = false;
                     }
 
                     if (currentNotification >= notifications.Count)
@@ -38,6 +40,7 @@ namespace Michsky.UI.ModernUIPack
                 {
                     enableUpdating = false;
                     currentNotification = 0;
+                    notifications.Clear();
                 }
             }
         }
@@ -46,6 +49,8 @@ namespace Michsky.UI.ModernUIPack
         {
             yield return new WaitForSeconds(notifications[currentNotification].timer + delay);
             Destroy(notifications[currentNotification].gameObject);
+            // notifications.Remove(notifications[currentNotification]);
+            enableUpdating = true;
             currentNotification += 1;
             StopCoroutine("StartNotification");
         }

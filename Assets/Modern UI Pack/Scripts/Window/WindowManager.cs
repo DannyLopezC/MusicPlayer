@@ -13,10 +13,8 @@ namespace Michsky.UI.ModernUIPack
         public int currentWindowIndex = 0;
         private int currentButtonIndex = 0;
         private int newWindowIndex;
-        public string windowFadeIn = "Panel In";
-        public string windowFadeOut = "Panel Out";
-        public string buttonFadeIn = "Normal to Pressed";
-        public string buttonFadeOut = "Pressed to Dissolve";
+        [HideInInspector] public bool editMode = false;
+        bool isFirstTime = true;
 
         private GameObject currentWindow;
         private GameObject nextWindow;
@@ -27,6 +25,11 @@ namespace Michsky.UI.ModernUIPack
         private Animator nextWindowAnimator;
         private Animator currentButtonAnimator;
         private Animator nextButtonAnimator;
+
+        string windowFadeIn = "In";
+        string windowFadeOut = "Out";
+        string buttonFadeIn = "Normal to Pressed";
+        string buttonFadeOut = "Pressed to Normal";
 
         [System.Serializable]
         public class WindowItem
@@ -50,6 +53,22 @@ namespace Michsky.UI.ModernUIPack
             currentWindow = windows[currentWindowIndex].windowObject;
             currentWindowAnimator = currentWindow.GetComponent<Animator>();
             currentWindowAnimator.Play(windowFadeIn);
+            isFirstTime = false;
+        }
+
+        void OnEnable()
+        {
+            if (isFirstTime == false && nextWindowAnimator == null)
+            {
+                currentWindowAnimator.Play(windowFadeIn);
+                currentButtonAnimator.Play(buttonFadeIn);
+            }
+
+            else if (isFirstTime == false && nextWindowAnimator != null)
+            {
+                nextWindowAnimator.Play(windowFadeIn);
+                nextButtonAnimator.Play(buttonFadeIn);
+            }
         }
 
         public void OpenFirstTab()
@@ -71,7 +90,6 @@ namespace Michsky.UI.ModernUIPack
 
                 currentWindowIndex = 0;
                 currentButtonIndex = 0;
-
                 currentWindow = windows[currentWindowIndex].windowObject;
                 currentWindowAnimator = currentWindow.GetComponent<Animator>();
                 currentWindowAnimator.Play(windowFadeIn);
@@ -124,10 +142,8 @@ namespace Michsky.UI.ModernUIPack
 
                 currentWindowIndex = newWindowIndex;
                 nextWindow = windows[currentWindowIndex].windowObject;
-
                 currentWindowAnimator = currentWindow.GetComponent<Animator>();
                 nextWindowAnimator = nextWindow.GetComponent<Animator>();
-
                 currentWindowAnimator.Play(windowFadeOut);
                 nextWindowAnimator.Play(windowFadeIn);
 
@@ -135,10 +151,8 @@ namespace Michsky.UI.ModernUIPack
                 {
                     currentButtonIndex = newWindowIndex;
                     nextButton = windows[currentButtonIndex].buttonObject;
-
                     currentButtonAnimator = currentButton.GetComponent<Animator>();
                     nextButtonAnimator = nextButton.GetComponent<Animator>();
-
                     currentButtonAnimator.Play(buttonFadeOut);
                     nextButtonAnimator.Play(buttonFadeIn);
                 }
@@ -202,7 +216,6 @@ namespace Michsky.UI.ModernUIPack
                 currentWindowIndex -= 1;
                 currentButtonIndex -= 1;
                 nextWindow = windows[currentWindowIndex].windowObject;
-
                 nextWindowAnimator = nextWindow.GetComponent<Animator>();
                 nextWindowAnimator.Play(windowFadeIn);
 
@@ -216,9 +229,67 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
+        public void ShowCurrentWindow()
+        {
+            if (nextWindowAnimator == null)
+                currentWindowAnimator.Play(windowFadeIn);
+            else
+                nextWindowAnimator.Play(windowFadeIn);
+        }
+
+        public void HideCurrentWindow()
+        {
+            if (nextWindowAnimator == null)
+                currentWindowAnimator.Play(windowFadeOut);
+            else
+                nextWindowAnimator.Play(windowFadeOut);
+        }
+
+        public void ShowCurrentButton()
+        {
+            if (nextButtonAnimator == null)
+                currentButtonAnimator.Play(buttonFadeIn);
+            else
+                nextButtonAnimator.Play(buttonFadeIn);
+        }
+
+        public void HideCurrentButton()
+        {
+            if (nextButtonAnimator == null)
+                currentButtonAnimator.Play(buttonFadeOut);
+            else
+                nextButtonAnimator.Play(buttonFadeOut);
+        }
+
         public void AddNewItem()
         {
             WindowItem window = new WindowItem();
+
+            if (windows.Count != 0 && windows[windows.Count - 1].windowObject != null)
+            {
+                int tempIndex = windows.Count - 1;
+               
+                GameObject tempWindow = windows[tempIndex].windowObject.transform.parent.GetChild(tempIndex).gameObject;
+                GameObject newWindow = Instantiate(tempWindow, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+               
+                newWindow.transform.SetParent(windows[tempIndex].windowObject.transform.parent, false);
+                newWindow.gameObject.name = "New Window " + tempIndex.ToString();
+               
+                window.windowName = "New Window " + tempIndex.ToString();
+                window.windowObject = newWindow;
+
+                if (windows[tempIndex].buttonObject != null)
+                {
+                    GameObject tempButton = windows[tempIndex].buttonObject.transform.parent.GetChild(tempIndex).gameObject;
+                    GameObject newButton = Instantiate(tempButton, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+
+                    newButton.transform.SetParent(windows[tempIndex].buttonObject.transform.parent, false);
+                    newButton.gameObject.name = "New Window " + tempIndex.ToString();
+
+                    window.buttonObject = newButton;
+                }
+            }
+
             windows.Add(window);
         }
     }

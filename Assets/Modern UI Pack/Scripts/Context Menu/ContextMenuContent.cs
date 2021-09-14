@@ -8,13 +8,14 @@ using TMPro;
 
 namespace Michsky.UI.ModernUIPack
 {
+    [AddComponentMenu("Modern UI Pack/Context Menu/Context Menu Content")]
     public class ContextMenuContent : MonoBehaviour, IPointerClickHandler
     {
-        [Header("RESOURCES")]
+        [Header("Resources")]
         public ContextMenuManager contextManager;
         public Transform itemParent;
 
-        [Header("ITEMS")]
+        [Header("Items")]
         public List<ContextItem> contexItems = new List<ContextItem>();
 
         Animator contextAnimator;
@@ -27,15 +28,16 @@ namespace Michsky.UI.ModernUIPack
         [System.Serializable]
         public class ContextItem
         {
-            public string itemText;
+            public string itemText = "Item Text";
             public Sprite itemIcon;
             public ContextItemType contextItemType;
-            public UnityEvent onClickEvents;
+            public UnityEvent onClick;
         }
 
         public enum ContextItemType
         {
             BUTTON
+            // SUB_MENU
         }
 
         void Start()
@@ -44,21 +46,17 @@ namespace Michsky.UI.ModernUIPack
             {
                 try
                 {
-                    contextManager = GameObject.Find("Context Menu").GetComponent<ContextMenuManager>();
-                    contextAnimator = contextManager.contextAnimator;
+                    contextManager = (ContextMenuManager)GameObject.FindObjectsOfType(typeof(ContextMenuManager))[0];
                     itemParent = contextManager.transform.Find("Content/Item List").transform;
                 }
 
-                catch
-                {
-                    Debug.Log("Context Menu - No variable attached to Context Manager.", this);
-                }
-            } 
+                catch { Debug.Log("<b>[Context Menu]</b> Context Manager is missing.", this); return; }
+            }
+
+            contextAnimator = contextManager.contextAnimator;
 
             foreach (Transform child in itemParent)
-            {
-                GameObject.Destroy(child.gameObject);
-            }
+                Destroy(child.gameObject);
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -72,9 +70,7 @@ namespace Michsky.UI.ModernUIPack
             else if (eventData.button == PointerEventData.InputButton.Right && contextManager.isContextMenuOn == false)
             {
                 foreach (Transform child in itemParent)
-                {
-                    GameObject.Destroy(child.gameObject);
-                }
+                    Destroy(child.gameObject);
 
                 for (int i = 0; i < contexItems.Count; ++i)
                 {
@@ -96,7 +92,7 @@ namespace Michsky.UI.ModernUIPack
 
                     Button itemButton;
                     itemButton = go.GetComponent<Button>();
-                    itemButton.onClick.AddListener(contexItems[i].onClickEvents.Invoke);
+                    itemButton.onClick.AddListener(contexItems[i].onClick.Invoke);
                     itemButton.onClick.AddListener(CloseOnClick);
                     StartCoroutine(ExecuteAfterTime(0.01f));
                 }

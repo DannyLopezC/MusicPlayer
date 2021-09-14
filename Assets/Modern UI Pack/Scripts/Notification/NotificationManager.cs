@@ -6,9 +6,10 @@ using TMPro;
 
 namespace Michsky.UI.ModernUIPack
 {
+    [RequireComponent(typeof(Animator))]
     public class NotificationManager : MonoBehaviour
     {
-        // CONTENT
+        // Content
         public Sprite icon;
         public string title = "Notification Title";
         [TextArea] public string description = "Notification description";
@@ -24,6 +25,7 @@ namespace Michsky.UI.ModernUIPack
         public float timer = 3f;
         public bool useCustomContent = false;
         public bool useStacking = false;
+        public bool destroyAfterPlaying = false;
         public NotificationStyle notificationStyle;
 
         public enum NotificationStyle
@@ -35,47 +37,32 @@ namespace Michsky.UI.ModernUIPack
 
         void Start()
         {
-            try
+            if (notificationAnimator == null)
+                notificationAnimator = gameObject.GetComponent<Animator>();
+        
+            if (useCustomContent == false)
             {
-                if (notificationAnimator == null)
-                    notificationAnimator = gameObject.GetComponent<Animator>();
-
-                if (useCustomContent == false)
-                {
-                    iconObj.sprite = icon;
-                    titleObj.text = title;
-                    descriptionObj.text = description;
-                }
-            }
-
-            catch
-            {
-                Debug.LogError("Notification - Cannot initalize the object due to missing components.", this);
+                try { UpdateUI(); }
+                catch { Debug.LogError("<b>[Notification]</b> Cannot initalize the object due to missing components.", this); }
             }
 
             if (useStacking == true)
             {
                 try
                 {
-                    var stacking = (NotificationStacking)GameObject.FindObjectsOfType(typeof(NotificationStacking))[0];
+                    NotificationStacking stacking = transform.GetComponentInParent<NotificationStacking>();
                     stacking.notifications.Add(this);
                     stacking.enableUpdating = true;
                     gameObject.SetActive(false);
                 }
 
-                catch { }
+                catch { Debug.LogError("<b>[Notification]</b> 'Stacking' is enabled but 'Notification Stacking' cannot be found in parent.", this); }
             }
-        }
-
-        IEnumerator StartTimer()
-        {
-            yield return new WaitForSeconds(timer);
-            notificationAnimator.Play("Out");
-            StopCoroutine("StartTimer");
         }
 
         public void OpenNotification()
         {
+            StopCoroutine("StartTimer");
             notificationAnimator.Play("In");
 
             if (enableTimer == true)
@@ -85,6 +72,21 @@ namespace Michsky.UI.ModernUIPack
         public void CloseNotification()
         {
             notificationAnimator.Play("Out");
+
+            if (destroyAfterPlaying == true)
+                StartCoroutine("DestroyNotification");
+        }
+
+        IEnumerator StartTimer()
+        {
+            yield return new WaitForSeconds(timer);
+            CloseNotification();
+        }
+
+        IEnumerator DestroyNotification()
+        {
+            yield return new WaitForSeconds(1f);
+            Destroy(gameObject);
         }
 
         public void UpdateUI()
@@ -96,10 +98,7 @@ namespace Michsky.UI.ModernUIPack
                 descriptionObj.text = description;
             }
 
-            catch
-            {
-                Debug.LogError("Notification - Cannot update the object due to missing components.", this);
-            }
+            catch { Debug.LogError("<b>[Notification]</b> Cannot update the component due to missing variables.", this); }
         }
     }
 }

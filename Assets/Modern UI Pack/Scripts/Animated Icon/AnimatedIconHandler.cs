@@ -4,13 +4,12 @@ using UnityEngine.EventSystems;
 
 namespace Michsky.UI.ModernUIPack
 {
-    public class AnimatedIconHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class AnimatedIconHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
-        [Header("SETTINGS")]
+        [Header("Settings")]
         public PlayType playType;
+        public Animator iconAnimator;
 
-        Animator iconAnimator;
-        Button eventButton;
         bool isClicked;
 
         public enum PlayType
@@ -21,13 +20,8 @@ namespace Michsky.UI.ModernUIPack
 
         void Start()
         {
-            iconAnimator = gameObject.GetComponent<Animator>();
-
-            if (playType == PlayType.CLICK)
-            {
-                eventButton = gameObject.GetComponent<Button>();
-                eventButton.onClick.AddListener(ClickEvent);
-            }
+            if (iconAnimator == null)
+                iconAnimator = gameObject.GetComponent<Animator>();
         }
 
         public void ClickEvent()
@@ -43,6 +37,11 @@ namespace Michsky.UI.ModernUIPack
                 iconAnimator.Play("In");
                 isClicked = true;
             }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            ClickEvent();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
