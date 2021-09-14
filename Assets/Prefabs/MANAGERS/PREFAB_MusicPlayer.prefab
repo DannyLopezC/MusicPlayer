@@ -140,9 +140,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfa9cade5dfb19b48a9fd60b9d7d2595, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playLists:
-  - {fileID: 11400000, guid: 0d903bafc2d563748a6c82f201d5f4d6, type: 2}
+  playLists: []
   source: {fileID: 0}
   currentPlaylistId: 0
-  title: {fileID: 0}
-  timer: {fileID: 0}
+  currentPlaylist: {fileID: 0}
+  currentSong:
+    audioClip: {fileID: 0}
+    id: 0
+    songName: 

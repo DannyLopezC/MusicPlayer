@@ -19,43 +19,26 @@ namespace MusicPlayer
         [ReadOnly]
         public Playlist.Song currentSong;
 
-
         private void Awake()
         {
             currentPlaylist = playLists[currentPlaylistId];
             currentSong = currentPlaylist.musicList[0];
             source = GetComponent<AudioSource>();
             source.clip = currentSong.audioClip;
-            //Play();
         }
 
         [Button, HorizontalGroup("Buttons")]
         public void Play()
         {
+            if (source.clip == null) return;
 
-            if (source.clip == null)
-            {
-                Debug.Log($"Null song");
-                return;
-            }
-
-            if (!source.isPlaying)
-            {
-                source.Play();
-                CancelInvoke("Next");
-                Invoke("Next", source.clip.length - source.time + 1f);
-            }
-            else
-            {
-                source.Pause();
-                CancelInvoke("Next");
-            }
+            if (!source.isPlaying) source.Play();
+            else source.Pause();
         }
 
         [Button, HorizontalGroup("Buttons")]
         public void Stop()
         {
-            CancelInvoke("Next");
             source.Stop();
         }
 
@@ -63,6 +46,9 @@ namespace MusicPlayer
         public void Next()
         {
             Debug.Log($"next");
+
+            source.time = 0f;
+
             string currentSongName = source.clip.name;
 
             for (int i = 0; i < currentPlaylist.musicList.Count; i++)
@@ -77,13 +63,15 @@ namespace MusicPlayer
             }
 
             source.clip = currentSong.audioClip;
-            Play();
         }
 
         [Button, HorizontalGroup("Buttons")]
         public void Back()
         {
             Debug.Log($"back");
+
+            source.time = 0f;
+
             string currentSongName = source.clip.name;
 
             for (int i = 0; i < currentPlaylist.musicList.Count; i++)
@@ -98,7 +86,6 @@ namespace MusicPlayer
             }
 
             source.clip = currentSong.audioClip;
-            Play();
         }
     }
 }
