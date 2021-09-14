@@ -37,16 +37,8 @@ namespace MusicPlayer
         }
 
         [Button, HorizontalGroup("Buttons")]
-        public void Stop()
-        {
-            source.Stop();
-        }
-
-        [Button, HorizontalGroup("Buttons")]
         public void Next()
         {
-            Debug.Log($"next");
-
             source.time = 0f;
 
             string currentSongName = source.clip.name;
@@ -68,8 +60,6 @@ namespace MusicPlayer
         [Button, HorizontalGroup("Buttons")]
         public void Back()
         {
-            Debug.Log($"back");
-
             source.time = 0f;
 
             string currentSongName = source.clip.name;

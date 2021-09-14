@@ -587,21 +587,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3155126030076200271, guid: 866d876eb79e922498244365e636c2a6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3692708297976618902, guid: 866d876eb79e922498244365e636c2a6,
         type: 3}
       propertyPath: audioManager
       value: 
       objectReference: {fileID: 1541181697}
-    - target: {fileID: 3708426020679964154, guid: 866d876eb79e922498244365e636c2a6,
-        type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 4294948498
-      objectReference: {fileID: 0}
     - target: {fileID: 5897431045083672237, guid: 866d876eb79e922498244365e636c2a6,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -611,11 +601,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6423504915425457109, guid: 866d876eb79e922498244365e636c2a6,
-        type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 4294948498
       objectReference: {fileID: 0}
     - target: {fileID: 6972393214468060450, guid: 866d876eb79e922498244365e636c2a6,
         type: 3}
