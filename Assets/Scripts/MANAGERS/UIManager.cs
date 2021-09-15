@@ -9,8 +9,6 @@ namespace MusicPlayer
 {
     public class UIManager : MonoBehaviour
     {
-        public AudioManager audioManager;
-
         [BoxGroup("UI")]
         public TMP_Text title;
         [BoxGroup("UI/Slider")]
@@ -24,7 +22,7 @@ namespace MusicPlayer
 
         private void Awake()
         {
-            if (title != null) title.text = audioManager.currentSong.songName;
+            if (title != null) title.text = AudioManager.instance.currentSong.songName;
             UpdateSlider();
         }
 
@@ -34,7 +32,7 @@ namespace MusicPlayer
 
             if (played)
             {
-                if (audioManager.source.isPlaying)
+                if (AudioManager.instance.source.isPlaying)
                 {
 
                 }
@@ -47,12 +45,12 @@ namespace MusicPlayer
 
         public void UpdateSlider(bool fromUpdate = false)
         {
-            if (audioManager.source == null) return;
+            if (AudioManager.instance.source == null) return;
 
-            if (!fromUpdate && audioManager.source.clip.length - 0.1 > slider.value)
-                audioManager.source.time = Mathf.Min(slider.value * audioManager.source.clip.length, audioManager.source.clip.length - 0.01f);
+            if (!fromUpdate && AudioManager.instance.source.clip.length - 0.1 > slider.value)
+                AudioManager.instance.source.time = Mathf.Min(slider.value * AudioManager.instance.source.clip.length, AudioManager.instance.source.clip.length - 0.01f);
 
-            if (slider != null && fromUpdate) slider.value = audioManager.source.time / audioManager.source.clip.length;
+            if (slider != null && fromUpdate) slider.value = AudioManager.instance.source.time / AudioManager.instance.source.clip.length;
 
             SetTimer();
 
@@ -60,11 +58,11 @@ namespace MusicPlayer
 
         public void SetTimer()
         {
-            int currentMinutes = (int)audioManager.source.time / 60;
-            int currentSeconds = (int)audioManager.source.time % 60;
+            int currentMinutes = (int)AudioManager.instance.source.time / 60;
+            int currentSeconds = (int)AudioManager.instance.source.time % 60;
 
-            int lengthMinutes = (int)audioManager.source.clip.length / 60;
-            int lengthSeconds = (int)audioManager.source.clip.length % 60;
+            int lengthMinutes = (int)AudioManager.instance.source.clip.length / 60;
+            int lengthSeconds = (int)AudioManager.instance.source.clip.length % 60;
 
             currentTimer.text = $"{currentMinutes.ToString("0")}:{currentSeconds.ToString("00")}";
             lengthTimer.text = $"{lengthMinutes.ToString("00")}:{lengthSeconds.ToString("00")}";
@@ -74,14 +72,14 @@ namespace MusicPlayer
         {
             if (title != null)
             {
-                if (audioManager.source.clip == null) title.text = "Null song";
-                else title.text = audioManager.currentSong.songName;
+                if (AudioManager.instance.source.clip == null) title.text = "Null song";
+                else title.text = AudioManager.instance.currentSong.songName;
             }
 
             play.gameObject.SetActive(false);
             pause.gameObject.SetActive(true);
 
-            audioManager.Play();
+            AudioManager.instance.Play();
             played = true;
         }
 
@@ -91,11 +89,11 @@ namespace MusicPlayer
             pause.gameObject.SetActive(false);
 
             played = false;
-            audioManager.Play();
+            AudioManager.instance.Play();
         }
 
-        public void OnNext() { audioManager.Next(); OnPlay(); }
+        public void OnNext() { AudioManager.instance.Next(); OnPlay(); }
 
-        public void OnBack() { audioManager.Back(); OnPlay(); }
+        public void OnBack() { AudioManager.instance.Back(); OnPlay(); }
     }
 }

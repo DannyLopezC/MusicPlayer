@@ -9,6 +9,8 @@ namespace MusicPlayer
     [RequireComponent(typeof(AudioSource))]
     public class AudioManager : MonoBehaviour
     {
+        public static AudioManager instance;
+
         [InlineEditor]
         public List<Playlist> playLists;
         public AudioSource source;
@@ -21,6 +23,14 @@ namespace MusicPlayer
 
         private void Awake()
         {
+            if (AudioManager.instance == null)
+            {
+                AudioManager.instance = this;
+                DontDestroyOnLoad(AudioManager.instance);
+            }
+            else Destroy(AudioManager.instance);
+
+
             currentPlaylist = playLists[currentPlaylistId];
             currentSong = currentPlaylist.musicList[0];
             source = GetComponent<AudioSource>();
