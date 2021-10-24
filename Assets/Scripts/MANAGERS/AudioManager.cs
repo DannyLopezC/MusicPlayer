@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 using Sirenix.OdinInspector;
 
 namespace MusicPlayer
@@ -11,15 +9,12 @@ namespace MusicPlayer
     {
         public static AudioManager instance;
 
-        [InlineEditor]
-        public List<Playlist> playLists;
+        [InlineEditor] public List<Playlist> playLists;
         public AudioSource source;
 
-        public int currentPlaylistId = 0;
-        [ReadOnly]
-        public Playlist currentPlaylist;
-        [ReadOnly]
-        public Playlist.Song currentSong;
+        public int currentPlaylistId;
+        [ReadOnly] public Playlist currentPlaylist;
+        [ReadOnly] public Playlist.Song currentSong;
 
         private void Awake()
         {
@@ -55,13 +50,10 @@ namespace MusicPlayer
 
             for (int i = 0; i < currentPlaylist.musicList.Count; i++)
             {
-                if (currentPlaylist.musicList[i].songName == currentSongName)
-                {
-                    if (i + 1 > currentPlaylist.musicList.Count - 1)
-                        currentSong = currentPlaylist.musicList[0];
-                    else
-                        currentSong = currentPlaylist.musicList[i + 1];
-                }
+                if (currentPlaylist.musicList[i].songName != currentSongName) continue;
+                currentSong = i + 1 > currentPlaylist.musicList.Count - 1
+                    ? currentPlaylist.musicList[0]
+                    : currentPlaylist.musicList[i + 1];
             }
 
             source.clip = currentSong.audioClip;
@@ -76,13 +68,10 @@ namespace MusicPlayer
 
             for (int i = 0; i < currentPlaylist.musicList.Count; i++)
             {
-                if (currentPlaylist.musicList[i].songName == currentSongName)
-                {
-                    if (i - 1 < 0)
-                        currentSong = currentPlaylist.musicList[currentPlaylist.musicList.Count - 1];
-                    else
-                        currentSong = currentPlaylist.musicList[i - 1];
-                }
+                if (currentPlaylist.musicList[i].songName != currentSongName) continue;
+                currentSong = i - 1 < 0
+                    ? currentPlaylist.musicList[currentPlaylist.musicList.Count - 1]
+                    : currentPlaylist.musicList[i - 1];
             }
 
             source.clip = currentSong.audioClip;

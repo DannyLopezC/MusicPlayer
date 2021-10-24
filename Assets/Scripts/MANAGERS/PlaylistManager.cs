@@ -2,29 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaylistManager : MonoBehaviour
+namespace MusicPlayer
 {
-    public static PlaylistManager instance;
-
-    void Awake()
+    public class PlaylistManager : MonoBehaviour
     {
-        if (instance == null)
+        public static PlaylistManager instance;
+
+        private void Awake()
         {
-            instance = this;
-            DontDestroyOnLoad(PlaylistManager.instance);
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(PlaylistManager.instance);
+            }
+            else Destroy(instance);
         }
-        else Destroy(instance);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

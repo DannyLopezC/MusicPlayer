@@ -7,8 +7,8 @@ namespace MusicPlayer
     public class BackgroundScroll : MonoBehaviour
     {
         public float speed;
-        Vector2 offset;
-        Material material;
+        private Vector2 offset;
+        private Material material;
 
         private void Awake()
         {
